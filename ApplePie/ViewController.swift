@@ -10,6 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var treeImageView: UIImageView!
+    @IBOutlet var letterButton: [UIButton]!
+    @IBOutlet weak var corretWordLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
+    
+    @IBAction func letterBtnPressed (_ sender: UIButton){
+        sender.isEnabled = false
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
