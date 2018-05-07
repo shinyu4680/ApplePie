@@ -23,14 +23,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var spendTimeLabel: UILabel!
     
     
-    
     let incorrectMovesAllowed = 7
     var totalWins = 0
     var totalLosses = 0
     var currentGame: Game!
     
     let themeDistribution = GKRandomDistribution(lowestValue: 0, highestValue: theme.count - 1)
-    let wordsDistribution = GKShuffledDistribution(lowestValue: 0, highestValue: 6)
     var newGameTheme: String?
     var newGameList: [String?] = []
     var round = 0
@@ -40,6 +38,7 @@ class ViewController: UIViewController {
     var gameTimer = Timer()
     var speedSconds = 0
     
+    // MARK: 字母按鍵
     @IBAction func letterBtnPressed (_ sender: UIButton){
         sender.isEnabled = false
         let letterString = sender.title(for: .normal)!
@@ -48,12 +47,15 @@ class ViewController: UIViewController {
         updateGameState()
     }
     
+    // MARK: 下一回合
     func newRound() {
         hintLabel.isHidden = true
         spendTimeLabel.isHidden = false
         newGameTheme = theme[themeDistribution.nextInt()]
         newGameList = listOfQuestionWords["\(newGameTheme ?? "animails")"]!
+        let wordsDistribution = GKShuffledDistribution(lowestValue: 0, highestValue: newGameList.count - 1)
         currentScore = 0
+        gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.countingSpeedTime), userInfo: nil, repeats: true)
         
         if round < 5 {
             let newword = newGameList[wordsDistribution.nextInt()]!
@@ -71,6 +73,7 @@ class ViewController: UIViewController {
         hintLabel.text = "\(newGameTheme ?? "animals")"
     }
     
+    // MARK: 更新UI畫面
     func updateUI() {
         var letters = [String]()
         for letter in currentGame.formattedWord {
@@ -90,6 +93,7 @@ class ViewController: UIViewController {
         }
     }
     
+    // MARK: 更新分數狀態
     func updateGameState() {
         if currentGame.incorrectMovesRemaining == 0 {
             totalLosses += 1
@@ -107,12 +111,14 @@ class ViewController: UIViewController {
         }
     }
     
+    // MARK: 字母按鍵的啟動
     func enableLetterButtons(_ enable: Bool) {
         for button in letterButtons {
             button.isEnabled = enable
         }
     }
     
+    // MARK: 提示按鍵
     @IBAction func hintButtonPressed(_ sender: Any){
         hintLabel.isHidden = false
         hintButton.isHidden = true
@@ -121,6 +127,7 @@ class ViewController: UIViewController {
         totalScoreLabel.text = "Score: \(totalScore)"
     }
     
+    // MARK: Alert
     func nextHandler (action: UIAlertAction) {
         newRound()
     }
@@ -130,15 +137,18 @@ class ViewController: UIViewController {
         let action = UIAlertAction(title: "Next", style: UIAlertActionStyle.default, handler: nextHandler)
         controller.addAction(action)
         show(controller, sender: nil)
+        gameTimer.invalidate()
     }
     
     func lose () {
-        let controller = UIAlertController(title: "Out of moves!", message: "Don't mind!", preferredStyle: UIAlertControllerStyle.alert)
+        let controller = UIAlertController(title: "Out of moves!", message: "Answer: " + currentGame.word, preferredStyle: UIAlertControllerStyle.alert)
         let action = UIAlertAction(title: "Next", style: UIAlertActionStyle.default, handler: nextHandler)
         controller.addAction(action)
         show(controller, sender: nil)
+        gameTimer.invalidate()
     }
     
+    // MARK: unwind
     @IBAction func unwindToMultipleChoicePage(segue: UIStoryboardSegue){
         round = 0
         totalWins = 0
@@ -146,10 +156,10 @@ class ViewController: UIViewController {
         totalScore = 0
         speedSconds = 0
         spendTimeLabel.text = "00:00"
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.countingSpeedTime), userInfo: nil, repeats: true)
         newRound()
     }
     
+    // MARK: Timer
     @objc func countingSpeedTime() {
         let showMinutes = String(format: "%02d", speedSconds / 60)
         let showSeconds = String(format: "%02d", speedSconds % 60)
@@ -161,8 +171,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         hintButton.isHidden = false
         hintButton.isEnabled = false
-        
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.countingSpeedTime), userInfo: nil, repeats: true)
+
         newRound()
         // Do any additional setup after loading the view, typically from a nib.
     }
