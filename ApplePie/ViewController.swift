@@ -21,7 +21,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var hintLabel: UILabel!
     @IBOutlet weak var totalScoreLabel: UILabel!
     @IBOutlet weak var spendTimeLabel: UILabel!
-    
+    @IBOutlet weak var pauseView: UIView!
+    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet var pauseTapGesture: UITapGestureRecognizer!
     
     let incorrectMovesAllowed = 7
     var totalWins = 0
@@ -51,6 +53,7 @@ class ViewController: UIViewController {
     func newRound() {
         hintLabel.isHidden = true
         spendTimeLabel.isHidden = false
+        pauseButton.isEnabled = true
         newGameTheme = theme[themeDistribution.nextInt()]
         newGameList = listOfQuestionWords["\(newGameTheme ?? "animails")"]!
         let wordsDistribution = GKShuffledDistribution(lowestValue: 0, highestValue: newGameList.count - 1)
@@ -167,11 +170,26 @@ class ViewController: UIViewController {
         speedSconds += 1
     }
     
+    //MARK: Pause
+    @IBAction func pauseButtonPressed(_ sender: Any) {
+        pauseButton.isEnabled = false
+        gameTimer.invalidate()
+        pauseView.isHidden = false
+        pauseTapGesture.isEnabled = true
+    }
+    
+    @IBAction func pauseTapGesture(_ sender: Any) {
+        pauseButton.isEnabled = true
+        gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.countingSpeedTime), userInfo: nil, repeats: true)
+        pauseView.isHidden = true
+        pauseTapGesture.isEnabled = false
+    }
+    
+    // MARK: viewdidload
     override func viewDidLoad() {
         super.viewDidLoad()
         hintButton.isHidden = false
         hintButton.isEnabled = false
-
         newRound()
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -186,6 +204,7 @@ class ViewController: UIViewController {
         gameTimer.invalidate()
     }
     
+    // MARK: prepare
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let controllor = segue.destination as? GameResultsViewController
         controllor?.totalScore = totalScoreLabel.text

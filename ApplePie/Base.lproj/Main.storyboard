@@ -299,6 +299,32 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aZU-O2-7AZ" userLabel="PauseButton">
+                                <rect key="frame" x="652" y="20" width="42" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Pause"/>
+                                <connections>
+                                    <action selector="pauseButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pXm-nO-yrD"/>
+                                </connections>
+                            </button>
+                            <view hidden="YES" alpha="0.90000000000000002" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZbB-hq-7dn" userLabel="PauseView">
+                                <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap to continue" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPV-ok-6nl">
+                                        <rect key="frame" x="238" y="183" width="260" height="48"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="d0L-IO-uwr" appends="YES" id="S0r-wB-4Cr"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -307,6 +333,9 @@
                         <outlet property="corretWordLabel" destination="T7Z-xO-Imb" id="VB5-i5-Xos"/>
                         <outlet property="hintButton" destination="9PG-bJ-UYr" id="jre-pV-moi"/>
                         <outlet property="hintLabel" destination="05l-FG-mnS" id="8rm-mt-7dh"/>
+                        <outlet property="pauseButton" destination="aZU-O2-7AZ" id="kWa-X0-bqf"/>
+                        <outlet property="pauseTapGesture" destination="d0L-IO-uwr" id="RfA-JP-eNV"/>
+                        <outlet property="pauseView" destination="ZbB-hq-7dn" id="yat-hs-vmn"/>
                         <outlet property="scoreLabel" destination="uuc-8m-Zar" id="CmA-jc-cAr"/>
                         <outlet property="spendTimeLabel" destination="mNS-qe-4LD" id="EoT-ze-glv"/>
                         <outlet property="totalScoreLabel" destination="i8S-5e-e80" id="rRu-eS-8ap"/>
@@ -341,6 +370,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer enabled="NO" id="d0L-IO-uwr">
+                    <connections>
+                        <action selector="pauseTapGesture:" destination="BYZ-38-t0r" id="0cU-HV-6zJ"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.95652173913044" y="133.33333333333334"/>
         </scene>
